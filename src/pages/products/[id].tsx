@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Button } from "@components/ui/button"
 
 import "./[id].css"
 
@@ -19,6 +20,7 @@ function ProductDetail() {
       <p className="read-the-docs">
         Click on the Vite and React logos to learn more
       </p>
+      <Button>Click me</Button>
     </>
   )
 }
