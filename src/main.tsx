@@ -1,26 +1,28 @@
-import { StrictMode } from "react";
+import { StrictMode, useEffect, useRef } from "react";
 import { createRoot, Root } from "react-dom/client";
-import { BrowserRouter } from "react-router-dom";
-import "./index.css";
+
 import App from "./App";
+import "./styles/globals.css";
 
-// 전역 변수로 root를 선언
-let root: Root | null = null;
+function Main() {
+  const rootRef = useRef<Root | null>(null);
 
-document.addEventListener("DOMContentLoaded", () => {
-  const container = document.getElementById("root");
+  useEffect(() => {
+    const container: HTMLElement | null = document.getElementById("root");
+    if (container && !rootRef.current) {
+      rootRef.current = createRoot(container);
+    }
 
-  if (container && !root) {
-    root = createRoot(container);
-  }
-
-  if (root) {
-    root.render(
-      <StrictMode>
-        <BrowserRouter>
+    if (rootRef.current) {
+      rootRef.current.render(
+        <StrictMode>
           <App />
-        </BrowserRouter>
-      </StrictMode>,
-    );
-  }
-});
+        </StrictMode>,
+      );
+    }
+  }, []);
+
+  return null;
+}
+
+export default Main;
