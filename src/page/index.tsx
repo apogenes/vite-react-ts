@@ -1,14 +1,22 @@
 import { useState } from 'react'
-import { Button } from "@components/ui/button"
+import { useQuery } from '@tanstack/react-query'
 
-import "./[id].css"
+import "./index.css"
+import { Product } from "./type"
+import { fetcher, QueryKeys } from "@lib/queryClient"
 
-function ProductDetail() {
+function Main() {
   const [count, setCount] = useState(0)
+
+  const { data } = useQuery<Product[], Error>({
+    queryKey: [QueryKeys.PRODUCTS],
+    queryFn: () => fetcher({ method: "GET", path: "/products" }),
+  });
+  console.log(data);
 
   return (
     <>
-      <h1 className="text-3xl font-bold underline">ProductDetail</h1>
+      <h1 className="text-3xl font-bold underline">Main</h1>
       <div className="card">
         <button onClick={() => setCount((count) => count + 1)}>
           count is {count}
@@ -20,9 +28,8 @@ function ProductDetail() {
       <p className="read-the-docs">
         Click on the Vite and React logos to learn more
       </p>
-      <Button>Click me</Button>
     </>
   )
 }
 
-export default ProductDetail
+export default Main

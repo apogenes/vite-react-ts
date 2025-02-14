@@ -1,13 +1,14 @@
-import { useState } from 'react'
+import { useState } from "react";
+import { Button } from "@component/ui/button";
 
-import "./index.css"
+import "./[id].css";
 
-function Products() {
-  const [count, setCount] = useState(0)
+function ProductDetail() {
+  const [count, setCount] = useState(0);
 
   return (
     <>
-      <h1 className="text-3xl font-bold underline">Products</h1>
+      <h1 className="text-3xl font-bold underline">ProductDetail</h1>
       <div className="card">
         <button onClick={() => setCount((count) => count + 1)}>
           count is {count}
@@ -19,8 +20,9 @@ function Products() {
       <p className="read-the-docs">
         Click on the Vite and React logos to learn more
       </p>
+      <Button>Click me</Button>
     </>
-  )
+  );
 }
 
-export default Products
+export default ProductDetail;

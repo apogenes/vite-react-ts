@@ -1,9 +1,9 @@
 import { lazy } from "react";
-import GlobalLayout from "@pages/_layout";
+import GlobalLayout from "@page/_layout";
 
-const Index = lazy(() => import("@pages/index"));
-const PoroductsIndex = lazy(() => import("@pages/products/index"));
-const ProductsId = lazy(() => import("@pages/products/[id]"));
+const Index = lazy(() => import("@page/index"));
+const PoroductIndex = lazy(() => import("@page/product/index"));
+const ProductId = lazy(() => import("@page/product/[id]"));
 
 export const routes = [
   {
@@ -11,14 +11,14 @@ export const routes = [
     element: <GlobalLayout />,
     children: [
       { path: "/", element: <Index /> },
-      { path: "/products", element: <PoroductsIndex /> },
-      { path: "/products/:id", element: <ProductsId /> },
+      { path: "/product", element: <PoroductIndex /> },
+      { path: "/product/:id", element: <ProductId /> },
     ],
   },
 ];
 
 export const pages = [
   { route: "/" },
-  { route: "/products" },
-  { route: "/products/:id" },
+  { route: "/product" },
+  { route: "/product/:id" },
 ];

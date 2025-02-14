@@ -8,9 +8,16 @@
     "rootDir": ".",
     "paths": {
       "@/*": ["./*"],
-      "@pages/*": ["./src/pages/*"],
-      "@components/*": ["./src/components/*"],
-      "@utils/*": ["./src/utils/*"]
+      "@app/*": ["./src/app/*"],
+      "@process/*": ["./src/process/*"],
+      "@page/*": ["./src/page/*"],
+      "@widget/*": ["./src/widget/*"],
+      "@feature/*": ["./src/feature/*"],
+      "@entity/*": ["./src/entity/*"],
+      "@shared/*": ["./src/shared/*"],
+      "@component/*": ["./src/component/*"],
+      "@util/*": ["./src/util/*"],
+      "@lib/*": ["./src/lib/*"]
     },
 
     /* Bundler mode */

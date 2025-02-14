@@ -4,7 +4,7 @@ const index: React.FC = () => {
   return (
     <>
       <hr />
-      <footer>footer here</footer>
+      <footer>footer here123</footer>
     </>
   );
 };

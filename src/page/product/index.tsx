@@ -2,12 +2,12 @@ import { useState } from 'react'
 
 import "./index.css"
 
-function Main() {
+function Product() {
   const [count, setCount] = useState(0)
 
   return (
     <>
-      <h1 className="text-3xl font-bold underline">Main</h1>
+      <h1 className="text-3xl font-bold underline">Product</h1>
       <div className="card">
         <button onClick={() => setCount((count) => count + 1)}>
           count is {count}
@@ -23,4 +23,4 @@ function Main() {
   )
 }
 
-export default Main
+export default Product

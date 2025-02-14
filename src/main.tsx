@@ -1,8 +1,9 @@
 import { StrictMode, useEffect, useRef } from "react";
 import { createRoot, Root } from "react-dom/client";
+import { BrowserRouter } from "react-router-dom";
 
-import App from "./App";
-import "./styles/globals.css";
+import App from "@app/App";
+import "./style/globals.css";
 
 function Main() {
   const rootRef = useRef<Root | null>(null);
@@ -16,7 +17,9 @@ function Main() {
     if (rootRef.current) {
       rootRef.current.render(
         <StrictMode>
-          <App />
+          <BrowserRouter>
+            <App />
+          </BrowserRouter>
         </StrictMode>,
       );
     }
