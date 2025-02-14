@@ -1,18 +1,47 @@
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 
 import "./index.css"
 import { Product } from "./type"
 import { fetcher, QueryKeys } from "@lib/queryClient"
 
+// export function useAfterQuery<TData = unknown, TError>({
+//   queryResult,
+//   enabled,
+//   onSuccess,
+//   onError,
+// }: QueryCallbacks<TData, TError>) {
+//   useEffect(() => {
+//     if (!enabled) return;
+//     if (queryResult.isSuccess && onSuccess) {
+//       onSuccess(queryResult.data);
+//     }
+//   }, [enabled, queryResult.isSuccess, queryResult.data, onSuccess]);
+
+//   useEffect(() => {
+//     if (!enabled) return;
+//     if (queryResult.isError && onError) {
+//       onError(queryResult.error);
+//     }
+//   }, [enabled, queryResult.isError, queryResult.error, onError]);
+// }
+
 function Main() {
   const [count, setCount] = useState(0)
 
-  const { data } = useQuery<Product[], Error>({
+  const queryResult = useQuery<Product[], Error>({
     queryKey: [QueryKeys.PRODUCTS],
     queryFn: () => fetcher({ method: "GET", path: "/products" }),
+    enabled: true,
   });
-  console.log(data);
+
+  const handleSuccess = useCallback((data: Product[]) => {
+    console.log(data);
+  }, []);
+
+  const handleError = useCallback((error: Error) => {
+    console.log(error);
+  }, []);
 
   return (
     <>
