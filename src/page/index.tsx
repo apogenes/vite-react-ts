@@ -1,7 +1,6 @@
 import { useCallback, useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 
-import "./index.css"
 import { Product } from "./type"
 import { fetcher, QueryKeys } from "@lib/queryClient"
 
@@ -55,7 +54,7 @@ function Main() {
         </p>
       </div>
       <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
+        Click on the Vite and React logos to learn more.
       </p>
     </>
   )

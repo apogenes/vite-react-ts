@@ -13,6 +13,26 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  /* Design System Colors */
+  --white: #FFFFFF;
+  --black: #000000;
+  --gray-100: #F6F6F6;
+  --gray-150: #EBEBEC;
+  --gray-200: #E0E1E2;
+  --gray-300: #C1C3C5;
+  --gray-400: #ABAEB1;
+  --gray-500: #8C9093;
+  --gray-600: #6D7176;
+  --gray-700: #585D62;
+  --gray-800: #43494F;
+  --gray-900: #2E343B;
+  --primary-300: #008A94;
+  --primary-400: #007078;
+  --primary-color: var(--primary-300);
+  --secondary-color: var(--primary-400);
+  --background-color: var(--gray-100);
+  --text-color: var(--gray-800);
 }
 
 a {
@@ -27,9 +47,12 @@ a:hover {
 body {
   margin: 0;
   display: flex;
-  place-items: center;
-  min-width: 320px;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 100vw;
   min-height: 100vh;
+  background-color: var(--background-color);
+  color: var(--text-color);
 }
 
 h1 {
@@ -44,12 +67,12 @@ button {
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: #1a1a1a;
+  background-color: var(--primary-color);
   cursor: pointer;
   transition: border-color 0.25s;
 }
 button:hover {
-  border-color: #646cff;
+  border-color: var(--secondary-color);
 }
 button:focus,
 button:focus-visible {

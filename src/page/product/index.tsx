@@ -1,7 +1,5 @@
 import { useState } from 'react'
 
-import "./index.css"
-
 function Product() {
   const [count, setCount] = useState(0)
 

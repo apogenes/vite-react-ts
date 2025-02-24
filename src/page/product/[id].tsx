@@ -1,8 +1,6 @@
 import { useState } from "react";
 import { Button } from "@component/ui/button";
 
-import "./[id].css";
-
 function ProductDetail() {
   const [count, setCount] = useState(0);
 

@@ -11,7 +11,7 @@ const Layout: React.FC = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <Suspense fallback={"loading..."}>
-        <div className="flex min-h-screen flex-col">
+        <div className="w-full min-w-[460px] max-w-[460px] max-[460px]:min-w-0 min-h-screen mx-auto bg-white shadow-lg flex flex-col">
           <Outlet />
           <Footer />
         </div>
