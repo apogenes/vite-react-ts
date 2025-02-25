@@ -5,9 +5,12 @@ import {
   QueryClient,
   QueryClientProvider,
 } from "@tanstack/react-query";
+import { GraphQLClient, RequestDocument } from "graphql-request";
 
 // any 타입 미리 만들어줌
 type AnyOBJ = { [key: string]: any };
+
+const API_URL = import.meta.env.VITE_REACT_APP_BACKEND_ENDPOINT;
 
 // Create a client
 export const getClient = (() => {
@@ -29,8 +32,42 @@ export const getClient = (() => {
   };
 })();
 
+// const gqlClient = new GraphQLClient(`${API_URL}/graphql`, {
+//   // headers: {
+//   //   authorization: `Bearer ${import.meta.env.VITE_REACT_APP_ACCESS_TOKEN}`,
+//   // }
+//   // credentials: "include",
+// });
+const gqlClient = new GraphQLClient(`${API_URL}/graphql`);
+
+
+interface IRequestOptions {
+  query: RequestDocument;
+  variables?: any;
+  requestHeaders?: HeadersInit;
+}
+
+const useErrorHandler = () => {
+  console.error('error');
+  throw new Error('error');
+};
+
+export const useGqlRequest = ({
+  query,
+  variables,
+  requestHeaders,
+}: IRequestOptions) => {
+  // const errorHandler = useErrorHandler();
+  console.log("//API_URL", API_URL);
+  const client = new GraphQLClient(`${API_URL}/graphql`);
+  console.log("//client", client);
+  return client.request(query, variables, requestHeaders);
+  // return client.request(query, variables, requestHeaders).catch(errorHandler);
+};
+
 // 기본 url
 const BASE_URL = "https://fakestoreapi.com";
+
 
 // async로 요청
 export const restFetcher = async ({

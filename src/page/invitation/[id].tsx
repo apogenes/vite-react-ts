@@ -1,6 +1,23 @@
+import { useHealthCheckQuery } from "@/src/shared/api/useHealthCheck";
 import React from "react";
+import { useParams } from "react-router-dom";
+
 
 const InvitationDetail: React.FC = () => {
+
+  const { id } = useParams<{ id: string }>();
+  console.log("//id", id);
+
+
+  // const { data } = useGetInvitationDetailQuery(id);
+
+  const { data, isLoading, isError, isSuccess, isFetching, isPending } = useHealthCheckQuery();
+  console.log("//data", data, isLoading, isError, isSuccess, isFetching, isPending);
+
+  if (!id) {
+    return <div>초대장 아이디가 없습니다.</div>;
+  }
+
   return (
     <div className="flex flex-col items-center justify-center gap-20 pt-40 pb-24 bg-primary-100">
       <div className="text-lg font-bold text-primary-400">초대장이 도착했어요.</div>
