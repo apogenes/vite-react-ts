@@ -14,7 +14,17 @@ export const getClient = (() => {
   let client: QueryClient | null = null;
 
   return () => {
-    if (!client) client = new QueryClient({});
+    if (!client) client = new QueryClient({
+      defaultOptions: {
+        queries: {
+          gcTime: 1000 * 60 * 60 * 24,
+          staleTime: 1000 * 60,
+          refetchOnMount: false,
+          refetchOnReconnect: false,
+          refetchOnWindowFocus: false,
+        },
+      },
+    });
     return client;
   };
 })();
@@ -23,7 +33,7 @@ export const getClient = (() => {
 const BASE_URL = "https://fakestoreapi.com";
 
 // async로 요청
-export const fetcher = async ({
+export const restFetcher = async ({
   method,
   path,
   body,
@@ -43,7 +53,7 @@ export const fetcher = async ({
 }) => {
   try {
     // 기본 url + path
-    const url = `${BASE_URL}${path}`;
+    let url = `${BASE_URL}${path}`;
 
     // RequestInit은 node에 기본적으로 정의되어 있음
     const fetchOptions: RequestInit = {
@@ -53,6 +63,15 @@ export const fetcher = async ({
         "Access-Control-Allow-Origin": BASE_URL,
       },
     };
+
+    // param이 오면
+    if (params) {
+      const searchParams = new URLSearchParams(params);
+      url += "?" + searchParams.toString();
+    }
+
+    // body가 오면
+    if (body) fetchOptions.body = JSON.stringify(body);
 
     // url와 옵션들 요청
     // 메서드와 path를 받아서 완성
@@ -67,6 +86,7 @@ export const fetcher = async ({
     console.error(err);
   }
 };
+
 
 // 쿼리 키 만들기
 export const QueryKeys = {

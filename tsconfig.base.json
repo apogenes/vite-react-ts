@@ -1,24 +1,26 @@
 {
   "compilerOptions": {
     /* build settings */
-    "incremental": true,
-    "module": "ESNext",
-    "skipLibCheck": true,
     "baseUrl": ".",
     "rootDir": ".",
     "paths": {
       "@/*": ["./*"],
-      "@app/*": ["./src/app/*"],
-      "@process/*": ["./src/process/*"],
-      "@page/*": ["./src/page/*"],
-      "@widget/*": ["./src/widget/*"],
-      "@feature/*": ["./src/feature/*"],
-      "@entity/*": ["./src/entity/*"],
-      "@shared/*": ["./src/shared/*"],
-      "@component/*": ["./src/component/*"],
-      "@util/*": ["./src/util/*"],
-      "@lib/*": ["./src/lib/*"]
+      // FSD
+      "@/app/*": ["./src/app/*"],  
+      "@/process/*": ["./src/process/*"],
+      "@/page/*": ["./src/page/*"],
+      "@/widget/*": ["./src/widget/*"],
+      "@/feature/*": ["./src/feature/*"],
+      "@/entity/*": ["./src/entity/*"],
+      "@/shared/*": ["./src/shared/*"],
+      // CUSTOM
+      "@/util/*": ["./src/util/*"],
+      "@/lib/*": ["./src/lib/*"],
+      "@/style/*": ["./src/style/*"]
     },
+    "incremental": true,
+    "module": "ESNext",
+    "skipLibCheck": true,
 
     /* Bundler mode */
     "moduleResolution": "bundler",

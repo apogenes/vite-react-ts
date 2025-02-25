@@ -1,8 +1,3 @@
-import { useCallback, useState } from 'react'
-import { useQuery } from '@tanstack/react-query'
-
-import { Product } from "./type"
-import { fetcher, QueryKeys } from "@lib/queryClient"
 
 // export function useAfterQuery<TData = unknown, TError>({
 //   queryResult,
@@ -26,29 +21,10 @@ import { fetcher, QueryKeys } from "@lib/queryClient"
 // }
 
 function Main() {
-  const [count, setCount] = useState(0)
-
-  const queryResult = useQuery<Product[], Error>({
-    queryKey: [QueryKeys.PRODUCTS],
-    queryFn: () => fetcher({ method: "GET", path: "/products" }),
-    enabled: true,
-  });
-
-  const handleSuccess = useCallback((data: Product[]) => {
-    console.log(data);
-  }, []);
-
-  const handleError = useCallback((error: Error) => {
-    console.log(error);
-  }, []);
-
   return (
     <>
       <h1 className="text-3xl font-bold underline">Main</h1>
       <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
         <p>
           Edit <code>src/App.tsx</code> and save to test HMR
         </p>
