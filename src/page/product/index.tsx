@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { Product } from '../type';
-import { restFetcher, QueryKeys } from '@/src/lib/queryClient';
+import { restFetcher, QueryKeys } from '@/shared/api/queryClient';
 import { Link } from 'react-router-dom';
 
 function ProductList() {

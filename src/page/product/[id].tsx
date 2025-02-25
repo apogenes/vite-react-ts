@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { Product } from "../type";
-import { restFetcher, QueryKeys } from "@/src/lib/queryClient";
+import { restFetcher, QueryKeys } from "@/shared/api/queryClient";
 
 function ProductDetail() {
   const { id } = useParams();

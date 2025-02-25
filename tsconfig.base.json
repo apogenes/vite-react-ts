@@ -13,10 +13,6 @@
       "@/feature/*": ["./src/feature/*"],
       "@/entity/*": ["./src/entity/*"],
       "@/shared/*": ["./src/shared/*"],
-      // CUSTOM
-      "@/util/*": ["./src/util/*"],
-      "@/lib/*": ["./src/lib/*"],
-      "@/style/*": ["./src/style/*"]
     },
     "incremental": true,
     "module": "ESNext",
