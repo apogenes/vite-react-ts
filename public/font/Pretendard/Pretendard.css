@@ -1,0 +1,84 @@
+/**
+ * Pretendard https://cactus.tistory.com/306
+ */
+
+@font-face {
+  font-family: 'Pretendard';
+  font-style: normal;
+  font-weight: 100;
+  src: url(Pretendard-Thin.subset.woff2) format('woff2'),
+    url(Pretendard-Thin.subset.woff) format('woff'),
+    url(Pretendard-Thin.otf) format('opentype');
+}
+
+@font-face {
+  font-family: 'Pretendard';
+  font-style: normal;
+  font-weight: 200;
+  src: url(Pretendard-ExtraLight.subset.woff2) format('woff2'),
+    url(Pretendard-ExtraLight.subset.woff) format('woff'),
+    url(Pretendard-ExtraLight.otf) format('opentype');
+}
+
+@font-face {
+  font-family: 'Pretendard';
+  font-style: normal;
+  font-weight: 300;
+  src: url(Pretendard-Light.subset.woff2) format('woff2'),
+    url(Pretendard-Light.subset.woff) format('woff'),
+    url(Pretendard-Light.otf) format('opentype');
+}
+
+@font-face {
+  font-family: 'Pretendard';
+  font-style: normal;
+  font-weight: 400;
+  src: url(Pretendard-Regular.subset.woff2) format('woff2'),
+    url(Pretendard-Regular.subset.woff) format('woff'),
+    url(Pretendard-Regular.otf) format('opentype');
+}
+
+@font-face {
+  font-family: 'Pretendard';
+  font-style: normal;
+  font-weight: 500;
+  src: url(Pretendard-Medium.subset.woff2) format('woff2'),
+    url(Pretendard-Medium.subset.woff) format('woff'),
+    url(Pretendard-Medium.otf) format('opentype');
+}
+
+@font-face {
+  font-family: 'Pretendard';
+  font-style: normal;
+  font-weight: 600;
+  src: url(Pretendard-SemiBold.subset.woff2) format('woff2'),
+    url(Pretendard-SemiBold.subset.woff) format('woff'),
+    url(Pretendard-SemiBold.otf) format('opentype');
+}
+
+@font-face {
+  font-family: 'Pretendard';
+  font-style: normal;
+  font-weight: 700;
+  src: url(Pretendard-Bold.subset.woff2) format('woff2'),
+    url(Pretendard-Bold.subset.woff) format('woff'),
+    url(Pretendard-Bold.otf) format('opentype');
+}
+
+@font-face {
+  font-family: 'Pretendard';
+  font-style: normal;
+  font-weight: 800;
+  src: url(Pretendard-ExtraBold.subset.woff2) format('woff2'),
+    url(Pretendard-ExtraBold.subset.woff) format('woff'),
+    url(Pretendard-ExtraBold.otf) format('opentype');
+}
+
+@font-face {
+  font-family: 'Pretendard';
+  font-style: normal;
+  font-weight: 900;
+  src: url(Pretendard-Black.subset.woff2) format('woff2'),
+    url(Pretendard-Black.subset.woff) format('woff'),
+    url(Pretendard-Black.otf) format('opentype');
+}
