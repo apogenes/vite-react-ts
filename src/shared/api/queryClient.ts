@@ -58,9 +58,7 @@ export const useGqlRequest = ({
   requestHeaders,
 }: IRequestOptions) => {
   // const errorHandler = useErrorHandler();
-  console.log("//API_URL", API_URL);
   const client = new GraphQLClient(`${API_URL}/graphql`);
-  console.log("//client", client);
   return client.request(query, variables, requestHeaders);
   // return client.request(query, variables, requestHeaders).catch(errorHandler);
 };

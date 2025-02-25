@@ -1,23 +1,5 @@
-import React, { Suspense } from "react";
-import { Outlet } from "react-router-dom";
-import { QueryClientProvider } from "@tanstack/react-query";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { LayoutProvider } from "@/app/layout/layoutProvider";
 
-import { getClient } from "@/shared/api/queryClient";
-import "@/app/style/globals.css";
-
-const Layout: React.FC = () => {
-  const queryClient = getClient();
-  return (
-    <QueryClientProvider client={queryClient}>
-      <div className="mx-auto flex min-h-screen w-full max-w-[460px] min-w-[460px] flex-col bg-white shadow-lg max-[460px]:min-w-0">
-        <Suspense fallback={"loading..."}>
-          <Outlet />
-        </Suspense>
-      </div>
-      <ReactQueryDevtools initialIsOpen={false} />
-    </QueryClientProvider>
-  );
-};
-
-export default Layout;
+export default function Layout({ children }: { children: React.ReactNode }) {
+  return <LayoutProvider>{children}</LayoutProvider>;
+}

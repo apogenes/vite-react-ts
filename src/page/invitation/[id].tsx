@@ -6,13 +6,11 @@ import { useParams } from "react-router-dom";
 const InvitationDetail: React.FC = () => {
 
   const { id } = useParams<{ id: string }>();
-  console.log("//id", id);
-
 
   // const { data } = useGetInvitationDetailQuery(id);
 
-  const { data, isLoading, isError, isSuccess, isFetching, isPending } = useHealthCheckQuery();
-  console.log("//data", data, isLoading, isError, isSuccess, isFetching, isPending);
+  const { data } = useHealthCheckQuery();
+  console.log("//data", data);
 
   if (!id) {
     return <div>초대장 아이디가 없습니다.</div>;
