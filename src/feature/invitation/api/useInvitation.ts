@@ -1,8 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import { gql } from "graphql-request";
 
-import { InvitationQueryKeys } from "../queryKey";
 import { useGqlRequest } from "@/shared/api/queryClient";
+import { InvitationQueryKeys } from "../queryKey";
 
 const GET_INVITATION_DETAIL = gql`
   query GetInvitationDetail($id: String!) {
@@ -23,7 +23,6 @@ const fetchInvitationDetail = async (id: string) => {
 }
 
 export const useGetInvitationDetailQuery = (id: string) => {
-  
   return useQuery({
     queryKey: [InvitationQueryKeys.INVITATION, id],
     queryFn: () => fetchInvitationDetail(id),

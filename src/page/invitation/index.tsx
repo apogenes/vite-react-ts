@@ -3,29 +3,37 @@ import { useSearchParams, useNavigate } from "react-router-dom";
 
 import { useHealthCheckQuery } from "@/shared/api/useHealthCheck";
 import { Button } from "@/shared/ui/button";
+import { useGetInvitationDetailQuery } from "@/feature/invitation/api/useInvitation";
+import { useAcceptInvitationQuery } from "@/feature/invitation/api/useAcceptInvitation";
 
 const Invitation: React.FC = () => {
-  const [searchParams] = useSearchParams();
-  const token = searchParams.get("token");
-  // const { data } = useGetInvitationDetailQuery(id);
-
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const token = searchParams.get("token") || import.meta.env.VITE_REACT_APP_INVITATION_TOKEN;
+  const acceptInviteId = searchParams.get("acceptInviteId") || import.meta.env.VITE_REACT_APP_INVITATION_ID;
+  
+  
+  // const { data } = useGetInvitationDetailQuery(id);
+  // const { mutate: acceptInvitation, isError: isAcceptInvitationError } = useAcceptInvitationQuery(acceptInviteId, token);
 
-  const { data } = useHealthCheckQuery();
-  console.log("//data", data);
+  // if (isAcceptInvitationError) {
+  //   navigate("/invitation/not-found");
+  // }
+
+  // const { data } = useHealthCheckQuery();
+  // console.log("//data", data);
 
   const handleAcceptInvitation = () => {
-    // navigate("/invitation/accept");
-    navigate("/invitation/not-found");
-    // navigate("/invitation/expired-letter");
+    // acceptInvitation();
+    navigate("/signup");
   };
 
-  if (token) {
+  // if (token) {
     // return <div>초대장 아이디가 없습니다.</div>;
     // navigate("/invitation/not-found");
-    navigate("/invitation/expired-letter");
-    return;
-  }
+    // navigate("/invitation/expired-letter");
+  //   return;
+  // }
 
   return (
     <>

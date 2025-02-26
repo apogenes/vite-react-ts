@@ -98,11 +98,15 @@ button:focus-visible {
   --color-red-400: #F14840;
   --color-red-500: #DA4D39;
 
-  --color-primary-100: #E6F4F5;
-  --color-primary-300: #008A94;
-  --color-primary-400: #007078;
-  --color-primary-color: var(--color-primary-300);
-  --color-secondary-color: var(--color-primary-400);
+  --color-primary-100: #EDF9FA;
+  --color-primary-200: #9ED6DB;
+  --color-primary-300: #4FA8AF;
+  --color-primary-400: #008A94;
+  --color-primary-500: #007078;
+  --color-primary-600: #025C61;
+
+  --color-primary-color: var(--color-primary-400);
+  --color-secondary-color: var(--color-primary-500);
   --background-color: var(--color-gray-100);
   --text-color: var(--color-gray-800);
 }
