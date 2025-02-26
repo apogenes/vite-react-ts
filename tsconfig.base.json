@@ -4,8 +4,7 @@
     "baseUrl": ".",
     "rootDir": ".",
     "paths": {
-      "@/*": ["./*"],
-      // FSD
+      // FSD 디렉토리 구조
       "@/app/*": ["./src/app/*"],  
       "@/process/*": ["./src/process/*"],
       "@/page/*": ["./src/page/*"],
@@ -17,6 +16,7 @@
     "incremental": true,
     "module": "ESNext",
     "skipLibCheck": true,
+    "types": ["vite-plugin-svgr/client"],
 
     /* Bundler mode */
     "moduleResolution": "bundler",
@@ -30,5 +30,6 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
-  }
+  },
+  "include": ["svg.d.ts"]
 }

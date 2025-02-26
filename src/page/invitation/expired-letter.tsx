@@ -1,4 +1,4 @@
-import { Button } from "@/src/shared/ui/button";
+import { Button } from "@/shared/ui/button";
 import { useNavigate } from "react-router-dom";
 
 export default function ExpiredInvitation() {

@@ -80,6 +80,7 @@ button:focus-visible {
 @theme {
   --color-white: #FFFFFF;
   --color-black: #000000;
+  
   --color-gray-100: #F6F6F6;
   --color-gray-150: #EBEBEC;
   --color-gray-200: #E0E1E2;
@@ -90,6 +91,13 @@ button:focus-visible {
   --color-gray-700: #585D62;
   --color-gray-800: #43494F;
   --color-gray-900: #2E343B;
+
+  --color-red-100: #FFF4F3;
+  --color-red-200: #FFDDD8;
+  --color-red-300: #E89286;
+  --color-red-400: #F14840;
+  --color-red-500: #DA4D39;
+
   --color-primary-100: #E6F4F5;
   --color-primary-300: #008A94;
   --color-primary-400: #007078;
