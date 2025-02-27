@@ -3,20 +3,20 @@ import { gql } from "graphql-request";
 
 import { useGqlRequest } from "@/shared/api/queryClient";
 
-interface AcceptInvitationResponse {
+interface AcceptInviteResponse {
   acceptInvite: {
     requestId: string;
     requestTime: string;
     smsVerificationId: string;
-  }
+  };
 }
 
-interface AcceptInvitationParams {
+interface AcceptInviteRequest {
   inviteId: string;
   token: string;
 }
 
-const POST_ACCEPT_INVITATION = gql`
+const ACCEPT_INVITE_GQL = gql`
   mutation AcceptInvite($inviteId: ID!, $token: String!) {
     acceptInvite(inviteId: $inviteId, token: $token) {
       requestId
@@ -26,19 +26,24 @@ const POST_ACCEPT_INVITATION = gql`
   }
 `;
 
-const fetchAcceptInvitation = async (params: AcceptInvitationParams): Promise<AcceptInvitationResponse> => {
-  const data = await useGqlRequest<AcceptInvitationResponse>({
-    query: POST_ACCEPT_INVITATION,
-    variables: params
+const mutationAcceptInvite = async (
+  params: AcceptInviteRequest,
+): Promise<AcceptInviteResponse> => {
+  const data = await useGqlRequest<AcceptInviteResponse>({
+    query: ACCEPT_INVITE_GQL,
+    variables: params,
   });
   return data;
-}
+};
 
-export const useAcceptInvitationMutation = (callbacks: { onSuccess: () => void; onError: (error: any) => void }) => {
+export const useAcceptInviteMutation = (callbacks: {
+  onSuccess: () => void;
+  onError: (error: any) => void;
+}) => {
   const { onSuccess, onError } = callbacks;
 
-  return useMutation<AcceptInvitationResponse, Error, AcceptInvitationParams>({
-    mutationFn: fetchAcceptInvitation,
+  return useMutation<AcceptInviteResponse, Error, AcceptInviteRequest>({
+    mutationFn: mutationAcceptInvite,
     onSuccess,
     onError,
   });

@@ -1,25 +1,23 @@
 import React, { useEffect } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 
-import { useGetInvitationDetailQuery } from "@/feature/invitation/api/useInvitationDetail";
-import { useAcceptInvitationMutation } from "@/feature/invitation/api/useAcceptInvitation";
-import { getGqlErrorDetailData } from "@/shared/api/queryClient";
+import { useInviteInfoQuery } from "@/feature/invitation/api/useInviteInfo";
+import { useAcceptInviteMutation } from "@/feature/invitation/api/useAcceptInvite";
+import { useInviteInfoError, useAcceptInviteCallback } from "@/feature/invitation/hook/useInvitationHook";
 import { Button } from "@/shared/ui/button";
 import InvitationSkeleton from "./InvitationSkeleton";
-import { useInvitationError, useAcceptInvitationCallback } from "@/feature/invitation/hook/useInvitationHook";
 
 const Invitation: React.FC = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const token = searchParams.get("token") || import.meta.env.VITE_REACT_APP_INVITATION_TOKEN;
   
-  const { data, error, isLoading, isFetched } = useGetInvitationDetailQuery(token);
+  const { data, error, isLoading, isFetched } = useInviteInfoQuery(token);
+  useInviteInfoError(error);
 
-  const { onSuccess, onError } = useAcceptInvitationCallback();
-  const { mutate: acceptInvitation } = useAcceptInvitationMutation({ onSuccess, onError });
+  const { onSuccess, onError } = useAcceptInviteCallback();
+  const { mutate: acceptInvitation } = useAcceptInviteMutation({ onSuccess, onError });
 
-  useInvitationError(error);
-  // useAcceptInvitationError(isAcceptInvitationError);
 
   useEffect(() => {
     if (!token || (isFetched && !data)) {
@@ -29,7 +27,6 @@ const Invitation: React.FC = () => {
 
   const handleAcceptInvitation = () => {
     acceptInvitation({ inviteId: data?.inviteInfo?._id || '', token });
-    
   };
 
   if (isLoading) {

@@ -4,7 +4,7 @@ import { gql } from "graphql-request";
 import { useGqlRequest } from "@/shared/api/queryClient";
 import { InvitationQueryKeys } from "../queryKey";
 
-interface InvitationDetail {
+interface InviteInfoResponse {
   inviteInfo: {
     _id: string;
     // brandId: string;
@@ -22,11 +22,11 @@ interface InvitationDetail {
     maskedName: string;
     maskedBirthDate: string;
     brandLogoUrl: string;
-  }
+  };
 }
 
 // 사용하지 않는 것들은 주석 처리
-const GET_INVITATION_DETAIL = gql`
+const INVITE_INFO_GQL = gql`
   query InviteInfo($token: String!) {
     inviteInfo(token: $token) {
       _id
@@ -49,18 +49,18 @@ const GET_INVITATION_DETAIL = gql`
   }
 `;
 
-const fetchInvitationDetail = async (token: string): Promise<InvitationDetail> => {
-  const data = await useGqlRequest<InvitationDetail>({
-    query: GET_INVITATION_DETAIL,
-    variables: { token }
+const queryInviteInfo = async (token: string): Promise<InviteInfoResponse> => {
+  const data = await useGqlRequest<InviteInfoResponse>({
+    query: INVITE_INFO_GQL,
+    variables: { token },
   });
   return data;
-}
+};
 
-export const useGetInvitationDetailQuery = (token: string) => {
-  return useQuery<InvitationDetail>({
-    queryKey: [InvitationQueryKeys.INVITATION_DETAIL, token],
-    queryFn: () => fetchInvitationDetail(token),
+export const useInviteInfoQuery = (token: string) => {
+  return useQuery<InviteInfoResponse>({
+    queryKey: [InvitationQueryKeys.INVITE_INFO, token],
+    queryFn: () => queryInviteInfo(token),
     enabled: !!token,
   });
 };
