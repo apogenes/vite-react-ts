@@ -1,3 +1,4 @@
+import { Toaster } from "@/shared/ui/sonner"
 
 export function DefaultLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -5,6 +6,7 @@ export function DefaultLayout({ children }: { children: React.ReactNode }) {
       <header>공통 헤더</header>
       <main>{children}</main>
       <footer>공통 푸터</footer>
+      <Toaster richColors position="top-center" />
     </div>
   );
 }
