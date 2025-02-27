@@ -1,44 +1,45 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 
-import { useHealthCheckQuery } from "@/shared/api/useHealthCheck";
+import { useGetInvitationDetailQuery } from "@/feature/invitation/api/useInvitationDetail";
+import { useAcceptInvitationMutation } from "@/feature/invitation/api/useAcceptInvitation";
+import { getGqlErrorDetailData } from "@/shared/api/queryClient";
 import { Button } from "@/shared/ui/button";
-import { useGetInvitationDetailQuery } from "@/feature/invitation/api/useInvitation";
-import { useAcceptInvitationQuery } from "@/feature/invitation/api/useAcceptInvitation";
+import InvitationSkeleton from "./InvitationSkeleton";
+import { useInvitationError, useAcceptInvitationCallback } from "@/feature/invitation/hook/useInvitationHook";
 
 const Invitation: React.FC = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const token = searchParams.get("token") || import.meta.env.VITE_REACT_APP_INVITATION_TOKEN;
-  const acceptInviteId = searchParams.get("acceptInviteId") || import.meta.env.VITE_REACT_APP_INVITATION_ID;
   
-  
-  // const { data } = useGetInvitationDetailQuery(id);
-  // const { mutate: acceptInvitation, isError: isAcceptInvitationError } = useAcceptInvitationQuery(acceptInviteId, token);
+  const { data, error, isLoading, isFetched } = useGetInvitationDetailQuery(token);
 
-  // if (isAcceptInvitationError) {
-  //   navigate("/invitation/not-found");
-  // }
+  const { onSuccess, onError } = useAcceptInvitationCallback();
+  const { mutate: acceptInvitation } = useAcceptInvitationMutation({ onSuccess, onError });
 
-  // const { data } = useHealthCheckQuery();
-  // console.log("//data", data);
+  useInvitationError(error);
+  // useAcceptInvitationError(isAcceptInvitationError);
+
+  useEffect(() => {
+    if (!token || (isFetched && !data)) {
+      navigate("/invitation/not-found");
+    }
+  }, [token, isFetched, data, navigate]);
 
   const handleAcceptInvitation = () => {
-    // acceptInvitation();
-    navigate("/signup");
+    acceptInvitation({ inviteId: data?.inviteInfo?._id || '', token });
+    
   };
 
-  // if (token) {
-    // return <div>초대장 아이디가 없습니다.</div>;
-    // navigate("/invitation/not-found");
-    // navigate("/invitation/expired-letter");
-  //   return;
-  // }
+  if (isLoading) {
+    return <InvitationSkeleton />;
+  }
 
   return (
     <>
       <div className="bg-primary-100 flex flex-col items-center justify-center gap-4 pt-10 pb-6">
-        <div className="text-primary-400 text-sm font-bold">(서비스 로고)</div>
+        <div className="text-primary-400 text-sm font-bold">(서비스명)</div>
         <img src="/image/letter.png" alt="초대장" className="h-20 w-20" />
         <div className="text-primary-400 text-lg font-bold">
           초대장이 도착했어요.
@@ -47,19 +48,19 @@ const Invitation: React.FC = () => {
       <div className="flex flex-col gap-6 pt-6 pr-4 pb-6 pl-4">
         <div className="flex flex-col gap-2">
           <div className="text-sm font-medium text-gray-600">
-            `{"마이포차"}의 {"한포차"} 담당자의 초대입니다.`
+            {`${data?.inviteInfo?.brandName}의 ${data?.inviteInfo?.storeName} 담당자의 초대입니다.`}
           </div>
           <div className="border-gray-150 inline-flex h-16 items-center justify-center gap-2 rounded-[10px] border bg-gray-100 p-3">
             <img
               className="h-10 w-10 rounded-lg"
-              src="https://placehold.co/40x40"
+              src={data?.inviteInfo?.brandLogoUrl || "https://placehold.co/40x40"}
             />
             <div className="inline-flex shrink grow basis-0 flex-col items-start justify-center gap-0.5">
               <div className="self-stretch text-xs leading-[14px] font-medium text-gray-600">
-                마이포차
+                {data?.inviteInfo?.brandName}
               </div>
               <div className="self-stretch text-base leading-tight font-bold text-gray-800">
-                둔촌역점
+                {data?.inviteInfo?.storeName}
               </div>
             </div>
           </div>
@@ -77,7 +78,7 @@ const Invitation: React.FC = () => {
                 이름
               </div>
               <div className="shrink grow basis-0 text-sm leading-[18px] font-medium text-gray-800">
-                정*주
+                {data?.inviteInfo?.maskedName || '-'}
               </div>
             </div>
             <div className="inline-flex items-start justify-start gap-2 self-stretch py-2">
@@ -85,7 +86,7 @@ const Invitation: React.FC = () => {
                 생년월일
               </div>
               <div className="shrink grow basis-0 self-stretch text-sm leading-[18px] font-medium text-gray-800">
-                86년 **월 **일 / 만 39세
+                {`${data?.inviteInfo?.maskedBirthDate || '-'} / 만 ${data?.inviteInfo?.age || '-'}세`}
               </div>
             </div>
             <div className="inline-flex items-start justify-start gap-2 self-stretch py-2">
@@ -93,7 +94,7 @@ const Invitation: React.FC = () => {
                 성별
               </div>
               <div className="shrink grow basis-0 self-stretch text-sm leading-[18px] font-medium text-gray-800">
-                남자
+                {data?.inviteInfo?.gender ? data.inviteInfo.gender === 'M' ? '남자' : '여자' : '-'}
               </div>
             </div>
             <div className="inline-flex items-start justify-start gap-2 self-stretch py-2">
@@ -101,7 +102,7 @@ const Invitation: React.FC = () => {
                 휴대폰 번호
               </div>
               <div className="shrink grow basis-0 self-stretch text-sm leading-[18px] font-medium text-gray-800">
-                01000000000
+                {data?.inviteInfo?.cellPhone || '-'}
               </div>
             </div>
           </div>
