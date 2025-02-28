@@ -1,20 +1,8 @@
 import { useMutation } from "@tanstack/react-query";
 import { gql } from "graphql-request";
 
+import { AcceptInviteRequest, AcceptInviteResponse } from "@/feature/invitation/model/invitationModel";
 import { useGqlRequest } from "@/shared/api/queryClient";
-
-interface AcceptInviteResponse {
-  acceptInvite: {
-    requestId: string;
-    requestTime: string;
-    smsVerificationId: string;
-  };
-}
-
-interface AcceptInviteRequest {
-  inviteId: string;
-  token: string;
-}
 
 const ACCEPT_INVITE_GQL = gql`
   mutation AcceptInvite($inviteId: ID!, $token: String!) {
@@ -37,7 +25,7 @@ const mutationAcceptInvite = async (
 };
 
 export const useAcceptInviteMutation = (callbacks: {
-  onSuccess: () => void;
+  onSuccess: (response: AcceptInviteResponse) => void;
   onError: (error: any) => void;
 }) => {
   const { onSuccess, onError } = callbacks;

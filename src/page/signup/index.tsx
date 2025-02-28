@@ -1,16 +1,17 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
+import { useLocation } from "react-router-dom";
 import { useForm, Controller } from "react-hook-form";
 
+import { TIMEOUT_TIME, RE_SEND_THRESHOLD, TimeoutNumberRef, TimeoutNumber } from "@/feature/signup/ui/TimeoutNumber";
+import { AcceptInviteResponse } from "@/feature/invitation/model/invitationModel";
+import { useVerificationSmsCodeMutation } from "@/feature/signup/model/useVerificationSmsCode";
+import { useVerificationSmsCodeCallback } from "@/feature/signup/hook/useSignupHook";
 import { Input } from "@/shared/ui/input";
 import { Button } from "@/shared/ui/button";
 import RotateRightIcon from "@/shared/icon/rotate-right.svg?react";
-import { formatTime } from "@/shared/util/time";
-
 type FormValues = {
   code: string;
 };
-
-const TIMEOUT_TIME = 180;
 
 const STEPS = [
   "휴대전화 번호를 인증해주세요",
@@ -19,15 +20,20 @@ const STEPS = [
 ];
 
 const Signup: React.FC = () => {
-  const [time, setTime] = useState(TIMEOUT_TIME);
-  const [step, setStep] = useState(0);
+  const location = useLocation();
+  const responseData: AcceptInviteResponse = location.state;
 
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setTime(time - 1);
-    }, 1000);
-    return () => clearInterval(timer);
-  }, [time]);
+  console.log("//responseData", responseData);
+  
+  const [step, setStep] = useState(0);
+  const [isDisabled, setIsDisabled] = useState(false);
+  
+  const timeoutRef = useRef<TimeoutNumberRef>(null);
+
+  const { onSuccess, onError } = useVerificationSmsCodeCallback({ onComplete: () => {
+    setStep(step + 1);
+  } });
+  const { mutate: verificationSmsCode } = useVerificationSmsCodeMutation({ onSuccess, onError });
 
   const {
     control,
@@ -39,13 +45,27 @@ const Signup: React.FC = () => {
     defaultValues: { code: "" },
   });
 
-  const onSubmit = (data: FormValues) => {
-    console.log("인증번호 제출", data);
+  const handleResendCode = () => {
+    if (!timeoutRef.current) return;
+
+    timeoutRef.current?.resetTime();
+    setIsDisabled(true);
+
+    const interval = setInterval(() => {
+      const currentTime = timeoutRef.current?.getTime() || 0;
+      if (currentTime <= TIMEOUT_TIME - RE_SEND_THRESHOLD) {
+        setIsDisabled(false);
+        clearInterval(interval);
+      }
+    }, 1000);
   };
 
-  const handleResendCode = () => {
-    setTime(TIMEOUT_TIME);
-    console.log("재전송");
+  const onSubmit = (data: FormValues) => {
+    console.log("인증번호 제출", data);
+    verificationSmsCode({
+      code: data.code,
+      smsVerificationId: responseData.acceptInvite.smsVerificationId,
+    });
   };
 
   const validateCode = (
@@ -56,12 +76,10 @@ const Signup: React.FC = () => {
       callback("인증번호를 입력하세요.");
       return false;
     }
-
     if (!/^[0-9]{6}$/.test(code)) {
       callback("6자리 숫자를 입력하세요.");
       return false;
     }
-
     return true;
   };
 
@@ -73,7 +91,6 @@ const Signup: React.FC = () => {
     ) {
       return;
     }
-
     onSubmit(getValues());
   };
 
@@ -130,6 +147,7 @@ const Signup: React.FC = () => {
                 variant="outline"
                 className="flex h-[50px] items-center justify-center gap-2 rounded-[10px] border !border-gray-200 !bg-white px-4 text-base leading-tight font-bold text-gray-800"
                 onClick={handleResendCode}
+                disabled={isDisabled}
               >
                 <RotateRightIcon className="h-4 w-4 text-gray-800" />
                 재전송
@@ -140,9 +158,7 @@ const Signup: React.FC = () => {
               <div className="text-right font-['Pretendard'] text-sm leading-[18px] font-medium text-red-400">
                 {errors?.code?.message || ""}
               </div>
-              <div className="text-right font-['Pretendard'] text-sm leading-[18px] font-medium text-red-400">
-                {formatTime(time)}
-              </div>
+              <TimeoutNumber ref={timeoutRef} />
             </div>
           </div>
 

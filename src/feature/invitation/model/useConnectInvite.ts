@@ -1,20 +1,8 @@
 import { useMutation } from "@tanstack/react-query";
 import { gql } from "graphql-request";
 
+import { ConnectInviteRequest, ConnectInviteResponse } from "@/feature/invitation/model/invitationModel";
 import { useGqlRequest } from "@/shared/api/queryClient";
-
-interface ConnectInviteResponse {
-  connectInvite: {
-    code: number;
-    message: string;
-    success: boolean;
-  };
-}
-
-interface ConnectInviteRequest {
-  inviteId: string;
-  token: string;
-}
 
 const CONNECT_INVITE_GQL = gql`
   mutation ConnectInvite($inviteId: ID!, $token: String!) {
@@ -37,7 +25,7 @@ const mutationConnectInvite = async (
 };
 
 export const useConnectInviteMutation = (callbacks: {
-  onSuccess: () => void;
+  onSuccess: (response: ConnectInviteResponse) => void;
   onError: (error: any) => void;
 }) => {
   const { onSuccess, onError } = callbacks;

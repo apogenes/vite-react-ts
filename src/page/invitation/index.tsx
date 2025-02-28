@@ -1,11 +1,11 @@
 import React, { useEffect } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 
-import { useInviteInfoQuery } from "@/feature/invitation/api/useInviteInfo";
-import { useAcceptInviteMutation } from "@/feature/invitation/api/useAcceptInvite";
+import InvitationSkeleton from "@/feature/invitation/ui/InvitationSkeleton";
+import { useInviteInfoQuery } from "@/feature/invitation/model/useInviteInfo";
+import { useAcceptInviteMutation } from "@/feature/invitation/model/useAcceptInvite";
 import { useInviteInfoError, useAcceptInviteCallback } from "@/feature/invitation/hook/useInvitationHook";
 import { Button } from "@/shared/ui/button";
-import InvitationSkeleton from "./InvitationSkeleton";
 
 const Invitation: React.FC = () => {
   const navigate = useNavigate();
@@ -27,6 +27,7 @@ const Invitation: React.FC = () => {
 
   const handleAcceptInvitation = () => {
     acceptInvitation({ inviteId: data?.inviteInfo?._id || '', token });
+    
   };
 
   if (isLoading) {
