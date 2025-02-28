@@ -20,6 +20,10 @@ export interface InviteInfoResponse {
   };
 }
 
+export interface InviteInfoRequest {
+  token: string;
+}
+
 export interface AcceptInviteResponse {
   acceptInvite: {
     requestId: string;

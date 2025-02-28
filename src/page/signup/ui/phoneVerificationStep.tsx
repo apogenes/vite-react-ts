@@ -1,4 +1,5 @@
 import React, { useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import { useForm, Controller } from "react-hook-form";
 
 import {
@@ -7,10 +8,8 @@ import {
   TimeoutNumberRef,
   TimeoutNumber,
 } from "@/feature/signup/ui/TimeoutNumber";
-import { AcceptInviteResponse } from "@/feature/invitation/model/invitationModel";
 import { useVerificationSmsCodeMutation } from "@/feature/signup/model/useVerificationSmsCode";
 import { useVerificationSmsCodeCallback } from "@/feature/signup/hook/useSignupHook";
-
 import { Input } from "@/shared/ui/input";
 import { Button } from "@/shared/ui/button";
 import RotateRightIcon from "@/shared/icon/rotate-right.svg?react";
@@ -20,14 +19,15 @@ type FormValues = {
 };
 
 interface PhoneVerificationStepProps {
-  data: AcceptInviteResponse;
   onComplete: () => void;
+  smsVerificationId?: string;
 }
 
 const PhoneVerificationStep: React.FC<PhoneVerificationStepProps> = ({
-  data,
+  smsVerificationId,
   onComplete,
 }) => {
+  const navigate = useNavigate();
   const [isDisabled, setIsDisabled] = useState(false);
 
   const timeoutRef = useRef<TimeoutNumberRef>(null);
@@ -66,7 +66,7 @@ const PhoneVerificationStep: React.FC<PhoneVerificationStepProps> = ({
   const onSubmit = (values: FormValues) => {
     verificationSmsCode({
       code: values.code,
-      smsVerificationId: data.acceptInvite.smsVerificationId,
+      smsVerificationId: smsVerificationId || "",
     });
   };
 
@@ -86,14 +86,17 @@ const PhoneVerificationStep: React.FC<PhoneVerificationStepProps> = ({
   };
 
   const handleSubmitCode = () => {
-    if (
-      !validateCode(getValues("code"), (errorMessage) => {
-        setError("code", { type: "required", message: errorMessage });
-      })
-    ) {
-      return;
-    }
-    onSubmit(getValues());
+    // if (
+    //   !validateCode(getValues("code"), (errorMessage) => {
+    //     setError("code", { type: "required", message: errorMessage });
+    //   })
+    // ) {
+    //   return;
+    // }
+    // onSubmit(getValues());
+    
+    //TODO: 임시 넘어가기 기능으로 처리
+    onComplete();
   };
 
   return (
@@ -107,7 +110,7 @@ const PhoneVerificationStep: React.FC<PhoneVerificationStepProps> = ({
           </div>
 
           <div className="flex flex-row gap-2">
-            <div className="focus-within:border-primary-300 flex h-[50px] shrink grow basis-0 items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 transition-colors duration-300 focus-within:border-[1px]">
+            <div className="focus-within:border-primary-400 flex h-[50px] shrink grow basis-0 items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 transition-colors duration-300 focus-within:border-[1px]">
               <Controller
                 name="code"
                 control={control}
@@ -148,7 +151,7 @@ const PhoneVerificationStep: React.FC<PhoneVerificationStepProps> = ({
             <div className="text-right font-['Pretendard'] text-sm leading-[18px] font-medium text-red-400">
               {errors?.code?.message || ""}
             </div>
-            <TimeoutNumber ref={timeoutRef} />
+            <TimeoutNumber ref={timeoutRef} onTimeout={() => navigate("/")} />
           </div>
         </div>
 

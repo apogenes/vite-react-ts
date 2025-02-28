@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { gql } from "graphql-request";
 
-import { InviteInfoResponse } from "@/feature/invitation/model/invitationModel";
+import { InviteInfoRequest, InviteInfoResponse } from "@/feature/invitation/model/invitationModel";
 import { InvitationQueryKeys } from "@/feature/invitation/queryKey";
 import { useGqlRequest } from "@/shared/api/queryClient";
 
@@ -30,7 +30,7 @@ const INVITE_INFO_GQL = gql`
   }
 `;
 
-const queryInviteInfo = async (token: string): Promise<InviteInfoResponse> => {
+const queryInviteInfo = async ({ token }: InviteInfoRequest): Promise<InviteInfoResponse> => {
   const data = await useGqlRequest<InviteInfoResponse>({
     query: INVITE_INFO_GQL,
     variables: { token },
@@ -38,10 +38,10 @@ const queryInviteInfo = async (token: string): Promise<InviteInfoResponse> => {
   return data;
 };
 
-export const useInviteInfoQuery = (token: string) => {
+export const useInviteInfoQuery = ({ token }: InviteInfoRequest) => {
   return useQuery<InviteInfoResponse>({
     queryKey: [InvitationQueryKeys.INVITE_INFO, token],
-    queryFn: () => queryInviteInfo(token),
+    queryFn: () => queryInviteInfo({ token }),
     enabled: !!token,
   });
 };

@@ -5,6 +5,7 @@ import InvitationSkeleton from "@/feature/invitation/ui/InvitationSkeleton";
 import { useInviteInfoQuery } from "@/feature/invitation/model/useInviteInfo";
 import { useAcceptInviteMutation } from "@/feature/invitation/model/useAcceptInvite";
 import { useInviteInfoError, useAcceptInviteCallback } from "@/feature/invitation/hook/useInvitationHook";
+import { AcceptInviteResponse } from "@/feature/invitation/model/invitationModel";
 import { Button } from "@/shared/ui/button";
 
 const Invitation: React.FC = () => {
@@ -12,10 +13,14 @@ const Invitation: React.FC = () => {
   const [searchParams] = useSearchParams();
   const token = searchParams.get("token") || import.meta.env.VITE_REACT_APP_INVITATION_TOKEN;
   
-  const { data, error, isLoading, isFetched } = useInviteInfoQuery(token);
+  const { data, error, isLoading, isFetched } = useInviteInfoQuery({ token });
   useInviteInfoError(error);
 
-  const { onSuccess, onError } = useAcceptInviteCallback();
+  const onComplete = (response: AcceptInviteResponse) => {
+    navigate("/signup", { state: response });
+  }
+
+  const { onSuccess, onError } = useAcceptInviteCallback({ onComplete });
   const { mutate: acceptInvitation } = useAcceptInviteMutation({ onSuccess, onError });
 
 

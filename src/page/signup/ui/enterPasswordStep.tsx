@@ -1,6 +1,10 @@
 import React from "react";
 
-const EnterPasswordStep = () => {
+interface EnterPasswordStepProps {
+  onComplete: () => void;
+}
+
+const EnterPasswordStep: React.FC<EnterPasswordStepProps> = ({ onComplete }) => {
   return <div>EnterPasswordStep</div>;
 };
 

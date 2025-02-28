@@ -2,7 +2,7 @@ import { useCallback, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
-import { AcceptInviteResponse } from "@/feature/invitation/model/invitationModel";
+import { AcceptInviteResponse, ConnectInviteResponse } from "@/feature/invitation/model/invitationModel";
 import { getGqlErrorDetailData } from "@/shared/api/queryClient";
 
 const ERROR_CODE_NO_INVITATION = -1;
@@ -25,12 +25,12 @@ export function useInviteInfoError(error: any) {
   }, [error]);
 }
 
-export const useAcceptInviteCallback = () => {
+export const useAcceptInviteCallback = ({ onComplete }: { onComplete: (response: AcceptInviteResponse) => void }) => {
   const navigate = useNavigate();
 
   const onSuccess = useCallback((response: AcceptInviteResponse) => {
-    navigate("/signup", { state: response });
-  }, [navigate]);
+    onComplete(response);
+  }, [navigate, onComplete]);
 
   const onError = useCallback((error: any) => {
     if (error) {
@@ -61,12 +61,12 @@ export const useAcceptInviteCallback = () => {
   return { onSuccess, onError };
 };
 
-export const useConnectInviteCallback = () => {
+export const useConnectInviteCallback = ({ onComplete }: { onComplete: (response: ConnectInviteResponse) => void }) => {
   const navigate = useNavigate();
 
-  const onSuccess = useCallback(() => {
-    //TODO: 연결 성공 후 페이지 이동
-  }, [navigate]);
+  const onSuccess = useCallback((response: ConnectInviteResponse) => {
+    onComplete(response);
+  }, [navigate, onComplete]);
 
   const onError = useCallback((error: any) => {
     if (error) {

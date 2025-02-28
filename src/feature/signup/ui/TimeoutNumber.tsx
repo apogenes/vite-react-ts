@@ -11,11 +11,18 @@ export interface TimeoutNumberRef {
 
 interface TimeoutNumberProps {
   initialTime?: number;
+  onTimeout?: () => void;
 }
 
 export const TimeoutNumber = forwardRef<TimeoutNumberRef, TimeoutNumberProps>(
-  ({ initialTime = TIMEOUT_TIME }, ref) => {
+  ({ initialTime = TIMEOUT_TIME, onTimeout }, ref) => {
     const [time, setTime] = useState(initialTime);
+
+    useEffect(() => {
+      if (time === 0 && onTimeout) {
+        onTimeout();
+      }
+    }, [time, onTimeout]);
 
     useEffect(() => {
       const timer = setInterval(() => {
