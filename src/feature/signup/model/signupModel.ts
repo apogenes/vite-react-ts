@@ -20,11 +20,13 @@ export const getStepComponent = (step: number) => {
 
 export const getStepProps = (
   step: number,
-  data: { smsVerificationId: string },
+  data: { token: string, inviteId: string, smsVerificationId: string },
 ) => {
   switch (step) {
     case 0:
       return {
+        token: data.token,
+        inviteId: data.inviteId,
         smsVerificationId: data.smsVerificationId,
       };
     case 1:
@@ -55,4 +57,17 @@ export interface DuplicateUserIdResponse {
 
 export interface DuplicateUserIdRequest {
   userId: string;
+}
+
+export interface RequestReAuthCodeResponse {
+  requestReAuthCode: {
+    requestId: string;
+    requestTime: string;
+    smsVerificationId: string;
+  };
+}
+
+export interface RequestReAuthCodeRequest {
+  inviteId: string;
+  token: string;
 }

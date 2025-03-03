@@ -1,15 +1,18 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useForm, Controller } from "react-hook-form";
+import { toast } from "sonner";
 
+import { useRequestReAuthCodeCallback, useVerificationSmsCodeCallback } from "@/feature/signup/hook/useSignupHook";
+import { useVerificationSmsCodeMutation } from "@/feature/signup/model/useVerificationSmsCode";
+import { useRequestReAuthCodeMutation } from "@/feature/signup/model/useRequestReAuthCode";
+import { RequestReAuthCodeResponse } from "@/feature/signup/model/signupModel";
 import {
   TIMEOUT_TIME,
   RE_SEND_THRESHOLD,
   TimeoutNumberRef,
   TimeoutNumber,
 } from "@/feature/signup/ui/TimeoutNumber";
-import { useVerificationSmsCodeMutation } from "@/feature/signup/model/useVerificationSmsCode";
-import { useVerificationSmsCodeCallback } from "@/feature/signup/hook/useSignupHook";
 import { Input } from "@/shared/ui/input";
 import { Button } from "@/shared/ui/button";
 import RotateRightIcon from "@/shared/icon/rotate-right.svg?react";
@@ -20,15 +23,26 @@ type FormValues = {
 
 interface PhoneVerificationStepProps {
   onComplete: () => void;
+  token?: string;
+  inviteId?: string;
   smsVerificationId?: string;
 }
 
 const PhoneVerificationStep: React.FC<PhoneVerificationStepProps> = ({
-  smsVerificationId,
+  token,
+  inviteId,
+  smsVerificationId: initialSmsVerificationId,
   onComplete,
 }) => {
   const navigate = useNavigate();
   const [isDisabled, setIsDisabled] = useState(false);
+  const [smsVerificationId, setSmsVerificationId] = useState(initialSmsVerificationId);
+
+  useEffect(() => {
+    if (!token || !inviteId || !smsVerificationId) {
+      navigate("/invitation/not-found");
+    }
+  }, [token, inviteId, smsVerificationId, navigate]);
 
   const timeoutRef = useRef<TimeoutNumberRef>(null);
 
@@ -36,6 +50,16 @@ const PhoneVerificationStep: React.FC<PhoneVerificationStepProps> = ({
   const { mutate: verificationSmsCode } = useVerificationSmsCodeMutation({
     onSuccess,
     onError,
+  });
+
+  const onCompleteRequestReAuthCode = (response: RequestReAuthCodeResponse) => {
+    setSmsVerificationId(response.requestReAuthCode.smsVerificationId);
+    toast.success("인증번호가 재전송되었습니다.");
+  };
+  const { onSuccess: onRequestReAuthCodeSuccess, onError: onRequestReAuthCodeError } = useRequestReAuthCodeCallback({ onComplete: onCompleteRequestReAuthCode });
+  const { mutate: requestReAuthCode } = useRequestReAuthCodeMutation({
+    onSuccess: onRequestReAuthCodeSuccess,
+    onError: onRequestReAuthCodeError,
   });
 
   const {
@@ -49,7 +73,7 @@ const PhoneVerificationStep: React.FC<PhoneVerificationStepProps> = ({
   });
 
   const handleResendCode = () => {
-    if (!timeoutRef.current) return;
+    if (!(inviteId && token) || !timeoutRef.current) return;
 
     timeoutRef.current?.resetTime();
     setIsDisabled(true);
@@ -61,12 +85,16 @@ const PhoneVerificationStep: React.FC<PhoneVerificationStepProps> = ({
         clearInterval(interval);
       }
     }, 1000);
+
+    requestReAuthCode({ inviteId, token })
   };
 
   const onSubmit = (values: FormValues) => {
+    if (!smsVerificationId) return;
+
     verificationSmsCode({
       code: values.code,
-      smsVerificationId: smsVerificationId || "",
+      smsVerificationId: smsVerificationId,
     });
   };
 

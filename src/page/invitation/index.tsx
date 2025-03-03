@@ -1,38 +1,44 @@
 import React, { useEffect } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 
-import InvitationSkeleton from "@/feature/invitation/ui/InvitationSkeleton";
 import { useInviteInfoQuery } from "@/feature/invitation/model/useInviteInfo";
 import { useAcceptInviteMutation } from "@/feature/invitation/model/useAcceptInvite";
 import { useInviteInfoError, useAcceptInviteCallback } from "@/feature/invitation/hook/useInvitationHook";
 import { AcceptInviteResponse } from "@/feature/invitation/model/invitationModel";
+import InvitationSkeleton from "@/feature/invitation/ui/InvitationSkeleton";
 import { Button } from "@/shared/ui/button";
 
 const Invitation: React.FC = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const token = searchParams.get("token") || import.meta.env.VITE_REACT_APP_INVITATION_TOKEN;
+  const token = searchParams.get("token") || '';
+
+  useEffect(() => {
+    if (!token) {
+      navigate("/invitation/not-found");
+    }
+  }, [token, navigate]);
   
   const { data, error, isLoading, isFetched } = useInviteInfoQuery({ token });
   useInviteInfoError(error);
 
-  const onComplete = (response: AcceptInviteResponse) => {
-    navigate("/signup", { state: response });
-  }
+  useEffect(() => {
+    if (isFetched && !data) {
+      navigate("/invitation/not-found");
+    }
+  }, [isFetched, data, navigate]);
 
+  const onComplete = (response: AcceptInviteResponse) => {
+    navigate(`/signup?token=${token}`, { state: {
+      inviteId: data?.inviteInfo?._id || '',
+      smsVerificationId: response.acceptInvite.smsVerificationId,
+    } });
+  }
   const { onSuccess, onError } = useAcceptInviteCallback({ onComplete });
   const { mutate: acceptInvitation } = useAcceptInviteMutation({ onSuccess, onError });
 
-
-  useEffect(() => {
-    if (!token || (isFetched && !data)) {
-      navigate("/invitation/not-found");
-    }
-  }, [token, isFetched, data, navigate]);
-
   const handleAcceptInvitation = () => {
     acceptInvitation({ inviteId: data?.inviteInfo?._id || '', token });
-    
   };
 
   if (isLoading) {

@@ -3,6 +3,7 @@ import { toast } from "sonner";
 
 import {
   DuplicateUserIdResponse,
+  RequestReAuthCodeResponse,
   VerificationSmsCodeResponse,
 } from "@/feature/signup/model/signupModel";
 import { getGqlErrorDetailData } from "@/shared/api/queryClient";
@@ -42,15 +43,35 @@ export const useVerificationSmsCodeCallback = ({
   return { onSuccess, onError };
 };
 
+export const useRequestReAuthCodeCallback = ({
+  onComplete,
+}: {
+  onComplete: (response: RequestReAuthCodeResponse) => void;
+}) => {
+  const onSuccess = useCallback(
+    (response: RequestReAuthCodeResponse) => {
+      onComplete(response);
+    },
+    [onComplete],
+  );
+
+  const onError = useCallback((error: any) => {
+    if (error) {
+      toast.error("알 수 없는 오류가 발생했습니다. 관리자에게 문의해주세요.");
+    }
+  }, []);
+
+  return { onSuccess, onError };
+};
+
 export const useDuplicateUserIdCallback = ({
   onComplete,
 }: {
-  onComplete: (isDuplicate: boolean) => void;
+  onComplete: (response: DuplicateUserIdResponse) => void;
 }) => {
   const onSuccess = useCallback(
     (response: DuplicateUserIdResponse) => {
-      console.log("//response", response);
-      onComplete(response.duplicateUserId);
+      onComplete(response);
     },
     [onComplete],
   );

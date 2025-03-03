@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { toast } from "sonner";
+import { XCircle } from "lucide-react";
 
 import { useDuplicateUserIdMutation } from "@/feature/signup/model/useDuplicateUserId";
 import { useDuplicateUserIdCallback } from "@/feature/signup/hook/useSignupHook";
+import { DuplicateUserIdResponse } from "@/feature/signup/model/signupModel";
 import { Input } from "@/shared/ui/input";
 import { Button } from "@/shared/ui/button";
 import CheckIcon from "@/shared/icon/check.svg?react";
@@ -19,26 +21,31 @@ interface EnterIdStepProps {
 const EnterIdStep: React.FC<EnterIdStepProps> = ({ onComplete }) => {
   const [isValidLength, setIsValidLength] = useState<boolean>(false);
   const [isValidPattern, setIsValidPattern] = useState<boolean>(false);
-  const [isDisabled, setIsDisabled] = useState(false);
 
-  const {
-    control,
-    setError,
-    clearErrors,
-    formState: { errors },
-    getValues,
-  } = useForm<FormValues>({
-    defaultValues: { id: "" },
+  const { control, setError, getValues, setValue, watch } = useForm<FormValues>(
+    {
+      defaultValues: { id: "" },
+    },
+  );
+
+  const idValue = watch("id");
+
+  const onCompleteDuplicateUserId = (response: DuplicateUserIdResponse) => {
+    if (response.duplicateUserId) {
+      toast.error("이미 존재하는 아이디입니다.");
+    } else {
+      onComplete();
+    }
+  };
+  const { onSuccess, onError } = useDuplicateUserIdCallback({
+    onComplete: onCompleteDuplicateUserId,
   });
-
-  const { onSuccess, onError } = useDuplicateUserIdCallback({ onComplete });
   const { mutate: duplicateUserId } = useDuplicateUserIdMutation({
     onSuccess,
     onError,
   });
 
   const onSubmit = (values: FormValues) => {
-    console.log("//values.id", values.id);
     duplicateUserId({ userId: values.id });
   };
 
@@ -73,8 +80,6 @@ const EnterIdStep: React.FC<EnterIdStepProps> = ({ onComplete }) => {
     onSubmit(getValues());
   };
 
-  console.log(errors);
-
   return (
     <>
       <div className="flex flex-col gap-2">
@@ -82,7 +87,7 @@ const EnterIdStep: React.FC<EnterIdStepProps> = ({ onComplete }) => {
           아이디
         </div>
 
-        <div className="focus-within:border-primary-400 flex h-[50px] shrink grow items-center rounded-lg border border-gray-300 bg-white px-4 transition-colors duration-300 focus-within:border-[1px]">
+        <div className="focus-within:border-primary-400 flex h-[50px] shrink grow items-center rounded-lg border border-gray-300 bg-white px-4 transition-colors duration-300 focus-within:border-[1px] gap-2 relative">
           <Controller
             name="id"
             control={control}
@@ -98,7 +103,7 @@ const EnterIdStep: React.FC<EnterIdStepProps> = ({ onComplete }) => {
                 {...field}
                 placeholder="아이디 입력"
                 maxLength={12}
-                className="w-full text-gray-800"
+                className="w-full pr-8 text-gray-800"
                 inputMode="text"
                 onChange={(e) => {
                   field.onChange(e);
@@ -107,6 +112,14 @@ const EnterIdStep: React.FC<EnterIdStepProps> = ({ onComplete }) => {
               />
             )}
           />
+          {idValue && (
+            <Button
+              className="absolute right-4 w-6 h-6 text-gray-300 transition !p-0 !bg-transparent"
+              onClick={() => setValue("id", "")}
+            >
+              <XCircle className="h-4 w-4" />
+            </Button>
+          )}
         </div>
 
         <div className="flex flex-col justify-center gap-1">

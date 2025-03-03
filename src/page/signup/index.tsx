@@ -1,21 +1,31 @@
 import React, { useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 
-import { AcceptInviteResponse } from "@/feature/invitation/model/invitationModel";
 import {
   SIGNUP_STEPS,
   getStepComponent,
   getStepProps,
 } from "@/feature/signup/model/signupModel";
 
+interface SignupLocationState {
+  inviteId: string;
+  smsVerificationId: string;
+}
+
 const Signup: React.FC = () => {
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const token = searchParams.get("token") || '';
+  
   const location = useLocation();
-  const responseData: AcceptInviteResponse = location.state;
+  const responseData: SignupLocationState = location.state;
 
   const [step, setStep] = useState(0);
   const StepComponent = getStepComponent(step);
   const stepProps = getStepProps(step, {
-    smsVerificationId: responseData.acceptInvite.smsVerificationId,
+    token,
+    inviteId: responseData.inviteId,
+    smsVerificationId: responseData.smsVerificationId,
   });
 
   return (
