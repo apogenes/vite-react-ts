@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 
+import TermsBottomSheet from "@/page/signup/ui/TermsBottomSheet";
 import {
   SIGNUP_STEPS,
   getStepComponent,
@@ -15,12 +16,14 @@ interface SignupLocationState {
 const Signup: React.FC = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const token = searchParams.get("token") || '';
-  
+  const token = searchParams.get("token") || "";
+
   const location = useLocation();
   const responseData: SignupLocationState = location.state;
 
   const [step, setStep] = useState(0);
+  const [isTermsOpen, setIsTermsOpen] = useState(false);
+
   const StepComponent = getStepComponent(step);
   const stepProps = getStepProps(step, {
     token,
@@ -46,14 +49,21 @@ const Signup: React.FC = () => {
           {...stepProps}
           onComplete={() => {
             if (step < SIGNUP_STEPS.length - 1) {
-              setStep((prev) => prev + 1)
+              setStep((prev) => prev + 1);
             } else {
-              //TODO: 회원가입 완료로 이동
+              setIsTermsOpen(true);
             }
-          }
-          }
+          }}
         />
       </div>
+      <TermsBottomSheet
+        open={isTermsOpen}
+        onClose={() => setIsTermsOpen(false)}
+        onConfirm={() => {
+          setIsTermsOpen(false);
+          navigate("/welcome"); // 약관 동의 후 회원가입 완료 페이지 이동 (예시)
+        }}
+      />
     </div>
   );
 };

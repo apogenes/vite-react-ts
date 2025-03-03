@@ -211,7 +211,7 @@ const EnterPasswordStep: React.FC<EnterPasswordStepProps> = ({
       <Button
         className="!bg-primary-300 h-[50px] rounded-[10px] px-4 text-base leading-tight font-bold text-white"
         onClick={handleSubmitCode}
-        disabled={!isValidLength || !isValidPattern}
+        // disabled={!isValidLength || !isValidPattern}
       >
         다음
       </Button>
