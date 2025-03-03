@@ -100,10 +100,10 @@ const EnterIdStep: React.FC<EnterIdStepProps> = ({ onComplete }) => {
             name="id"
             control={control}
             rules={{
-              required: "인증번호를 입력하세요.",
+              required: "아이디 입력",
               pattern: {
-                value: /^[0-9]{6}$/,
-                message: "6자리 숫자를 입력하세요.",
+                value: /^[a-z0-9]+$/,
+                message: "영문 소문자와 숫자만 입력 가능합니다.",
               },
             }}
             render={({ field }) => (
