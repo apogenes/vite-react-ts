@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useForm, Controller } from "react-hook-form";
 import { toast } from "sonner";
+import { XCircle, RotateCw } from "lucide-react";
 
 import { useRequestReAuthCodeCallback, useVerificationSmsCodeCallback } from "@/feature/signup/hook/useSignupHook";
 import { useVerificationSmsCodeMutation } from "@/feature/signup/model/useVerificationSmsCode";
@@ -15,7 +16,6 @@ import {
 } from "@/feature/signup/ui/TimeoutNumber";
 import { Input } from "@/shared/ui/input";
 import { Button } from "@/shared/ui/button";
-import RotateRightIcon from "@/shared/icon/rotate-right.svg?react";
 
 type FormValues = {
   code: string;
@@ -68,9 +68,16 @@ const PhoneVerificationStep: React.FC<PhoneVerificationStepProps> = ({
     clearErrors,
     formState: { errors },
     getValues,
+    setValue,
+    watch,
   } = useForm<FormValues>({
     defaultValues: { code: "" },
   });
+  const idValue = watch("code");
+
+  const onCodeClear = () => {
+    setValue("code", "");
+  };
 
   const handleResendCode = () => {
     if (!(inviteId && token) || !timeoutRef.current) return;
@@ -138,7 +145,7 @@ const PhoneVerificationStep: React.FC<PhoneVerificationStepProps> = ({
           </div>
 
           <div className="flex flex-row gap-2">
-            <div className="focus-within:border-primary-400 flex h-[50px] shrink grow basis-0 items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 transition-colors duration-300 focus-within:border-[1px]">
+            <div className="focus-within:border-primary-400 flex h-[50px] shrink grow basis-0 items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 transition-colors duration-300 focus-within:border-[1px] relative">
               <Controller
                 name="code"
                 control={control}
@@ -163,6 +170,14 @@ const PhoneVerificationStep: React.FC<PhoneVerificationStepProps> = ({
                   />
                 )}
               />
+                        {idValue && (
+            <Button
+              className="absolute right-4 w-6 h-6 text-gray-300 transition !p-0 !bg-transparent"
+              onClick={onCodeClear}
+            >
+              <XCircle className="h-4 w-4" />
+            </Button>
+          )}
             </div>
             <Button
               variant="outline"
@@ -170,7 +185,7 @@ const PhoneVerificationStep: React.FC<PhoneVerificationStepProps> = ({
               onClick={handleResendCode}
               disabled={isDisabled}
             >
-              <RotateRightIcon className="h-4 w-4 text-gray-800" />
+              <RotateCw className="h-4 w-4 text-gray-800" />
               재전송
             </Button>
           </div>

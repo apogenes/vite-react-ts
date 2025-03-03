@@ -1,14 +1,13 @@
 import React, { useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { toast } from "sonner";
-import { XCircle } from "lucide-react";
+import { XCircle, Check } from "lucide-react";
 
 import { useDuplicateUserIdMutation } from "@/feature/signup/model/useDuplicateUserId";
 import { useDuplicateUserIdCallback } from "@/feature/signup/hook/useSignupHook";
 import { DuplicateUserIdResponse } from "@/feature/signup/model/signupModel";
 import { Input } from "@/shared/ui/input";
 import { Button } from "@/shared/ui/button";
-import CheckIcon from "@/shared/icon/check.svg?react";
 
 type FormValues = {
   id: string;
@@ -45,13 +44,19 @@ const EnterIdStep: React.FC<EnterIdStepProps> = ({ onComplete }) => {
     onError,
   });
 
+  const onIdClear = () => {
+    setValue("id", "");
+    setIsValidLength(false);
+    setIsValidPattern(false);
+  };
+
   const onSubmit = (values: FormValues) => {
     duplicateUserId({ userId: values.id });
   };
 
   const validateCode = (id: string) => {
     let isLengthValid = id.length >= 6 && id.length <= 12;
-    let isPatternValid = /^[a-z0-9]+$/.test(id);
+    let isPatternValid = /^(?=.*[a-z])(?=.*\d)[a-z0-9]+$/.test(id);
 
     setIsValidLength(isLengthValid);
     setIsValidPattern(isPatternValid);
@@ -73,11 +78,14 @@ const EnterIdStep: React.FC<EnterIdStepProps> = ({ onComplete }) => {
   };
 
   const handleSubmitCode = () => {
-    const id = getValues("id");
-    if (!validateCode(id)) {
-      return;
-    }
-    onSubmit(getValues());
+    // const id = getValues("id");
+    // if (!validateCode(id)) {
+    //   return;
+    // }
+    // onSubmit(getValues());
+
+    //TODO: 임시 넘어가기 기능으로 처리
+    onComplete();
   };
 
   return (
@@ -115,7 +123,7 @@ const EnterIdStep: React.FC<EnterIdStepProps> = ({ onComplete }) => {
           {idValue && (
             <Button
               className="absolute right-4 w-6 h-6 text-gray-300 transition !p-0 !bg-transparent"
-              onClick={() => setValue("id", "")}
+              onClick={onIdClear}
             >
               <XCircle className="h-4 w-4" />
             </Button>
@@ -126,7 +134,7 @@ const EnterIdStep: React.FC<EnterIdStepProps> = ({ onComplete }) => {
           <div
             className={`flex flex-row items-center gap-1 text-sm leading-[18px] font-medium transition-all duration-300 ease-in-out ${isValidLength ? "text-primary-400" : "text-gray-400"}`}
           >
-            <CheckIcon
+            <Check
               className={`h-4 w-4 transition-all duration-300 ease-in-out ${isValidLength ? "text-primary-400" : "text-gray-400"}`}
             />
             6-12자
@@ -134,7 +142,7 @@ const EnterIdStep: React.FC<EnterIdStepProps> = ({ onComplete }) => {
           <div
             className={`flex flex-row items-center gap-1 text-sm leading-[18px] font-medium transition-all duration-300 ease-in-out ${isValidPattern ? "text-primary-400" : "text-gray-400"}`}
           >
-            <CheckIcon
+            <Check
               className={`h-4 w-4 transition-all duration-300 ease-in-out ${isValidPattern ? "text-primary-400" : "text-gray-400"}`}
             />
             영문 소문자/숫자 조합
@@ -145,7 +153,7 @@ const EnterIdStep: React.FC<EnterIdStepProps> = ({ onComplete }) => {
       <Button
         className="!bg-primary-300 h-[50px] rounded-[10px] px-4 text-base leading-tight font-bold text-white"
         onClick={handleSubmitCode}
-        disabled={!isValidLength || !isValidPattern}
+        // disabled={!isValidLength || !isValidPattern}
       >
         다음
       </Button>
