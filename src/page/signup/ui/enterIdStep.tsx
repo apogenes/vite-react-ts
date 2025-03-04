@@ -5,7 +5,7 @@ import { XCircle, Check } from "lucide-react";
 
 import { useDuplicateUserIdMutation } from "@/feature/signup/model/useDuplicateUserId";
 import { useDuplicateUserIdCallback } from "@/feature/signup/hook/useSignupHook";
-import { DuplicateUserIdResponse } from "@/feature/signup/model/signupModel";
+import { DuplicateUserIdResponse, SignupData } from "@/feature/signup/model/signupModel";
 import { Input } from "@/shared/ui/input";
 import { Button } from "@/shared/ui/button";
 
@@ -14,7 +14,7 @@ type FormValues = {
 };
 
 interface EnterIdStepProps {
-  onComplete: () => void;
+  onComplete: (data: Partial<SignupData>) => void;
 }
 
 const EnterIdStep: React.FC<EnterIdStepProps> = ({ onComplete }) => {
@@ -33,7 +33,9 @@ const EnterIdStep: React.FC<EnterIdStepProps> = ({ onComplete }) => {
     if (response.duplicateUserId) {
       toast.error("이미 존재하는 아이디입니다.");
     } else {
-      onComplete();
+      onComplete({
+        id: getValues("id"),
+      });
     }
   };
   const { onSuccess, onError } = useDuplicateUserIdCallback({
@@ -85,7 +87,9 @@ const EnterIdStep: React.FC<EnterIdStepProps> = ({ onComplete }) => {
     // onSubmit(getValues());
 
     //TODO: 임시 넘어가기 기능으로 처리
-    onComplete();
+    onComplete({
+      id: getValues("id"),
+    });
   };
 
   return (

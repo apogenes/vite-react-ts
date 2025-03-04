@@ -7,7 +7,7 @@ import { XCircle, RotateCw } from "lucide-react";
 import { useRequestReAuthCodeCallback, useVerificationSmsCodeCallback } from "@/feature/signup/hook/useSignupHook";
 import { useVerificationSmsCodeMutation } from "@/feature/signup/model/useVerificationSmsCode";
 import { useRequestReAuthCodeMutation } from "@/feature/signup/model/useRequestReAuthCode";
-import { RequestReAuthCodeResponse } from "@/feature/signup/model/signupModel";
+import { RequestReAuthCodeResponse, SignupData } from "@/feature/signup/model/signupModel";
 import {
   TIMEOUT_TIME,
   RE_SEND_THRESHOLD,
@@ -22,7 +22,7 @@ type FormValues = {
 };
 
 interface PhoneVerificationStepProps {
-  onComplete: () => void;
+  onComplete: (data: Partial<SignupData>) => void;
   token?: string;
   inviteId?: string;
   smsVerificationId?: string;
@@ -46,7 +46,7 @@ const PhoneVerificationStep: React.FC<PhoneVerificationStepProps> = ({
 
   const timeoutRef = useRef<TimeoutNumberRef>(null);
 
-  const { onSuccess, onError } = useVerificationSmsCodeCallback({ onComplete });
+  const { onSuccess, onError } = useVerificationSmsCodeCallback({ onComplete: () => onComplete({}) });
   const { mutate: verificationSmsCode } = useVerificationSmsCodeMutation({
     onSuccess,
     onError,
@@ -131,7 +131,7 @@ const PhoneVerificationStep: React.FC<PhoneVerificationStepProps> = ({
     // onSubmit(getValues());
     
     //TODO: 임시 넘어가기 기능으로 처리
-    onComplete();
+    onComplete({});
   };
 
   return (

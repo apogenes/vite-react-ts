@@ -5,6 +5,7 @@ import { Eye, EyeOff, Check } from "lucide-react";
 
 import { Input } from "@/shared/ui/input";
 import { Button } from "@/shared/ui/button";
+import { SignupData } from "@/feature/signup/model/signupModel";
 
 type FormValues = {
   password: string;
@@ -12,7 +13,7 @@ type FormValues = {
 };
 
 interface EnterPasswordStepProps {
-  onComplete: () => void;
+  onComplete: (data: Partial<SignupData>) => void;
 }
 
 const EnterPasswordStep: React.FC<EnterPasswordStepProps> = ({
@@ -85,7 +86,9 @@ const EnterPasswordStep: React.FC<EnterPasswordStepProps> = ({
       return;
     }
 
-    onComplete();
+    onComplete({
+      password: getValues("password"),
+    });
     //TODO: 로그인 처리
   };
 

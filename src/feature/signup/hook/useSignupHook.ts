@@ -3,7 +3,9 @@ import { toast } from "sonner";
 
 import {
   DuplicateUserIdResponse,
+  JoinResponse,
   RequestReAuthCodeResponse,
+  SignupData,
   VerificationSmsCodeResponse,
 } from "@/feature/signup/model/signupModel";
 import { getGqlErrorDetailData } from "@/shared/api/queryClient";
@@ -13,12 +15,12 @@ const ERROR_CODE_INVALID_SMS_CODE = -1;
 export const useVerificationSmsCodeCallback = ({
   onComplete,
 }: {
-  onComplete: () => void;
+  onComplete: (data: Partial<SignupData>) => void;
 }) => {
   const onSuccess = useCallback(
     (response: VerificationSmsCodeResponse) => {
       if (response.verificationSmsCode.success) {
-        onComplete();
+        onComplete({});
       }
     },
     [onComplete],
@@ -78,6 +80,29 @@ export const useDuplicateUserIdCallback = ({
 
   const onError = useCallback((error: any) => {
     console.log("//error", error);
+    if (error) {
+      toast.error("알 수 없는 오류가 발생했습니다. 관리자에게 문의해주세요.");
+    }
+  }, []);
+
+  return { onSuccess, onError };
+};
+
+export const useJoinCallback = ({
+  onComplete,
+}: {
+  onComplete: (response: JoinResponse) => void;
+}) => {
+  const onSuccess = useCallback(
+    (response: JoinResponse) => {
+      if (response.join.success) {
+        onComplete(response);
+      }
+    },
+    [onComplete],
+  );
+
+  const onError = useCallback((error: any) => {
     if (error) {
       toast.error("알 수 없는 오류가 발생했습니다. 관리자에게 문의해주세요.");
     }

@@ -38,6 +38,12 @@ export const getStepProps = (
   }
 };
 
+export interface SignupData {
+  id: string;
+  password: string;
+}
+
+
 export interface VerificationSmsCodeResponse {
   verificationSmsCode: {
     code: number;
@@ -70,4 +76,19 @@ export interface RequestReAuthCodeResponse {
 export interface RequestReAuthCodeRequest {
   inviteId: string;
   token: string;
+}
+
+export interface JoinResponse {
+  join: {
+    code: number;
+    message: string;
+    success: boolean;
+  };
+}
+
+export interface JoinRequest {
+  inviteId: string;
+  inviteToken: string;
+  password: string;
+  userId: string;
 }
