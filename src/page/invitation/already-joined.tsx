@@ -5,7 +5,7 @@ import { ConnectInviteResponse } from "@/feature/invitation/model/invitationMode
 
 const AlreadyJoined: React.FC = () => {
   const onComplete = (response: ConnectInviteResponse) => {
-    //TODO: 연결 성공 후 페이지 이동
+    //TODO: 가맹점 연결이 완료되었습니다 페이지로 이동
   }
   const { onSuccess, onError } = useConnectInviteCallback({ onComplete });
   const { mutate: connectInvite } = useConnectInviteMutation({ onSuccess, onError });

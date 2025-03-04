@@ -26,7 +26,7 @@ const Welcome = () => {
       <div data-svg-wrapper className="relative">
         <img
           src="/image/welcome.png"
-          alt="초대장을 찾을 수 없습니다"
+          alt="회원가입 및 가맹점 연결 완료"
           className="h-45 w-45"
         />
       </div>
