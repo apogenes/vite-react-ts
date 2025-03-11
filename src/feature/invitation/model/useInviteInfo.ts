@@ -5,7 +5,6 @@ import { InviteInfoRequest, InviteInfoResponse } from "@/feature/invitation/mode
 import { InvitationQueryKeys } from "@/feature/invitation/queryKey";
 import { useGqlRequest } from "@/shared/api/queryClient";
 
-
 // 사용하지 않는 것들은 주석 처리
 const INVITE_INFO_GQL = gql`
   query InviteInfo($token: String!) {
