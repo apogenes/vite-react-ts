@@ -34,7 +34,7 @@ const Invitation: React.FC = () => {
       smsVerificationId: response.acceptInvite.smsVerificationId,
     } });
   }
-  const { onSuccess, onError } = useAcceptInviteCallback({ onComplete });
+  const { onSuccess, onError } = useAcceptInviteCallback({ onComplete, data: data ? { ...data, token } : undefined });
   const { mutate: acceptInvitation } = useAcceptInviteMutation({ onSuccess, onError });
 
   const handleAcceptInvitation = () => {

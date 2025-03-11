@@ -91,4 +91,5 @@ export interface JoinRequest {
   inviteToken: string;
   password: string;
   userId: string;
+  isMarketingAgreed: boolean;
 }

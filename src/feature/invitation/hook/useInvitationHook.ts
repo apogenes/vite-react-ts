@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import {
   AcceptInviteResponse,
   ConnectInviteResponse,
+  InviteInfoResponse,
 } from "@/feature/invitation/model/invitationModel";
 import { getGqlErrorDetailData } from "@/shared/api/queryClient";
 
@@ -31,8 +32,10 @@ export function useInviteInfoError(error: any) {
 
 export const useAcceptInviteCallback = ({
   onComplete,
+  data,
 }: {
   onComplete: (response: AcceptInviteResponse) => void;
+  data?: InviteInfoResponse & { token: string };
 }) => {
   const navigate = useNavigate();
 
@@ -56,11 +59,9 @@ export const useAcceptInviteCallback = ({
           navigate("/invitation/not-found");
           break;
         case ERROR_CODE_ALREADY_JOINED: // 이미 가입된 경우
-          toast.error(
-            (errorDetail?.originalError as { message: string })?.message ||
-              "이미 가입된 사용자 입니다",
-          );
-          navigate("/invitation/already-joined");
+          navigate(`/invitation/already-joined?token=${data?.token}`, { state: {
+            inviteId: data?.inviteInfo?._id || '',
+          } });
           break;
         default:
           toast.error(
@@ -69,7 +70,7 @@ export const useAcceptInviteCallback = ({
           break;
       }
     }
-  }, []);
+  }, [data]);
 
   return { onSuccess, onError };
 };
@@ -83,14 +84,15 @@ export const useConnectInviteCallback = ({
 
   const onSuccess = useCallback(
     (response: ConnectInviteResponse) => {
-      onComplete(response);
+      if (response.connectInvite.success) {
+        onComplete(response);
+      }
     },
     [navigate, onComplete],
   );
 
   const onError = useCallback((error: any) => {
     if (error) {
-      //TODO: error.code 가 401 일 경우 로그인 페이지로 이동하는 처리
       const errorDetail = getGqlErrorDetailData(error);
       const errorCode = (errorDetail?.originalError as { code: number })?.code;
       switch (errorCode) {
@@ -107,11 +109,6 @@ export const useConnectInviteCallback = ({
               "이미 연결된 가맹점이 있습니다",
           );
           navigate("/invitation/already-connected");
-          break;
-        default:
-          toast.error(
-            "알 수 없는 오류가 발생했습니다. 관리자에게 문의해주세요.",
-          );
           break;
       }
     }

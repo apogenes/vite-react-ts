@@ -52,7 +52,7 @@ const Signup: React.FC = () => {
 
   const { onSuccess, onError } = useJoinCallback({
     onComplete: () => {
-      navigate("/welcome");
+      navigate("/signup/welcome");
     },
   });
   const { mutate: join } = useJoinMutation({
@@ -60,12 +60,13 @@ const Signup: React.FC = () => {
     onError,
   });
 
-  const handleJoin = () => {
+  const handleJoin = (isMarketingInfoTermsAgreed: boolean) => {
     join({
       inviteId: responseData.inviteId,
       inviteToken: token,
       password: signupData.password,
       userId: signupData.id,
+      isMarketingAgreed: isMarketingInfoTermsAgreed,
     });
   }
 

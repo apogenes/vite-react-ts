@@ -121,17 +121,14 @@ const PhoneVerificationStep: React.FC<PhoneVerificationStepProps> = ({
   };
 
   const handleSubmitCode = () => {
-    // if (
-    //   !validateCode(getValues("code"), (errorMessage) => {
-    //     setError("code", { type: "required", message: errorMessage });
-    //   })
-    // ) {
-    //   return;
-    // }
-    // onSubmit(getValues());
-    
-    //TODO: 임시 넘어가기 기능으로 처리
-    onComplete({});
+    if (
+      !validateCode(getValues("code"), (errorMessage) => {
+        setError("code", { type: "required", message: errorMessage });
+      })
+    ) {
+      return;
+    }
+    onSubmit(getValues());
   };
 
   return (

@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { useForm, Controller } from "react-hook-form";
-import { toast } from "sonner";
 import { Eye, EyeOff, Check } from "lucide-react";
 
 import { Input } from "@/shared/ui/input";
@@ -31,7 +30,6 @@ const EnterPasswordStep: React.FC<EnterPasswordStepProps> = ({
     clearErrors,
     formState: { errors },
     getValues,
-    setValue,
     watch,
   } = useForm<FormValues>({
     defaultValues: { password: "", passwordConfirm: "" },
@@ -89,7 +87,6 @@ const EnterPasswordStep: React.FC<EnterPasswordStepProps> = ({
     onComplete({
       password: getValues("password"),
     });
-    //TODO: 로그인 처리
   };
 
   return (
@@ -214,7 +211,7 @@ const EnterPasswordStep: React.FC<EnterPasswordStepProps> = ({
       <Button
         className="!bg-primary-300 h-[50px] rounded-[10px] px-4 text-base leading-tight font-bold text-white"
         onClick={handleSubmitCode}
-        // disabled={!isValidLength || !isValidPattern}
+        disabled={!isValidLength || !isValidPattern}
       >
         다음
       </Button>

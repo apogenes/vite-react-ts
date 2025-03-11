@@ -5,8 +5,8 @@ import { JoinRequest, JoinResponse } from "@/feature/signup/model/signupModel";
 import { useGqlRequest } from "@/shared/api/queryClient";
 
 const JOIN_GQL = gql`
-  mutation Join($inviteId: String!, $inviteToken: String!, $password: String!, $userId: String!) {
-    join(inviteId: $inviteId, inviteToken: $inviteToken, password: $password, userId: $userId) {
+  mutation Join($inviteId: String!, $inviteToken: String!, $password: String!, $userId: String!, $isMarketingAgreed: Boolean) {
+    join(inviteId: $inviteId, inviteToken: $inviteToken, password: $password, userId: $userId, isMarketingAgreed: $isMarketingAgreed) {
       code
       message
       success

@@ -118,8 +118,12 @@ export const useGqlRequest = <T>({
   requestHeaders,
 }: IRequestOptions): Promise<T> => {
   const errorHandler = useErrorHandler();
-  const client = new GraphQLClient(`${API_URL}/graphql`);
-  return client.request<T>(query, variables, requestHeaders).catch(errorHandler);
+  const client = new GraphQLClient(`${API_URL}/graphql`, {
+    credentials: "include",
+  });
+  return client
+    .request<T>(query, variables, requestHeaders)
+    .catch(errorHandler);
 };
 
 // 기본 url
